@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using upcity.Data.UserRepo;
 using upcity.Database;
 
 namespace upcity
@@ -31,7 +32,12 @@ namespace upcity
         {
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("UpcityDB")));
 
+            services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());});
+
             services.AddControllers();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "upcity", Version = "v1" });
