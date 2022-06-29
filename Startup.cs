@@ -15,6 +15,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using upcity.Data.UserRepo;
 using upcity.Database;
+using upcity.Helpers;
 
 namespace upcity
 {
@@ -32,11 +33,12 @@ namespace upcity
         {
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("UpcityDB")));
 
-            services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());});
+            services.AddCors(c => { c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());});
 
             services.AddControllers();
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<JwtService>();
 
             services.AddSwaggerGen(c =>
             {
@@ -57,6 +59,8 @@ namespace upcity
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+          //  app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 
             app.UseAuthorization();
 

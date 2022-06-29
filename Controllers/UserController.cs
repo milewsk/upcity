@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using upcity.Data;
 using upcity.Data.UserRepo;
 using upcity.Domain.Models;
 using upcity.Domain.ModelsDTO;
+using upcity.Helpers;
 
 namespace upcity.Controllers
 {
@@ -16,16 +18,35 @@ namespace upcity.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
+        private readonly JwtService _jwtService;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(IUserRepository userRepository, JwtService jwtService)
         {
             _userRepository = userRepository;
+            _jwtService = jwtService;
+
         }
 
         [HttpGet]
         public async Task<IActionResult> GetUser()
         {
-            return Ok(Json("siema"));
+            try
+            {
+                var jwt = Request.Cookies["jwt"];
+
+                var token = _jwtService.Verify(jwt);
+
+                Guid userId = new Guid(token.Issuer);
+
+                var user = _userRepository.GetUserByGuid(userId);
+
+                return Ok(user);
+
+            }catch(Exception e)
+            {
+                return Unauthorized();
+            }
+            
         }
 
         [HttpPost]
@@ -34,7 +55,12 @@ namespace upcity.Controllers
         {
 
             User user = _userRepository.CreateUser(userDTO);
-            return Created("created", user);
+            if (user != null)
+            {
+                return Created("created",JsonConvert.SerializeObject(new ResponseSchema(201, "Rejestracja pomyślna", new { email = user.Email })));
+            }
+
+            return BadRequest(new ResponseSchema(400, "Taki użytkownik już istnieje", null));
         }
 
         [HttpPost]
@@ -45,7 +71,22 @@ namespace upcity.Controllers
 
             if (user == null) return BadRequest(new { message = "Podany email lub hasło są niepoprawne" });
 
-            return Ok();
+            var jwt = _jwtService.Generate(user.Id);
+
+            Response.Cookies.Append("jwt", jwt, new CookieOptions { HttpOnly = true });
+
+            
+            return Ok(JsonConvert.SerializeObject(new ResponseSchema( 200,"Logowanie pomyślne", new { jwt })));
         }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout() {
+
+            Response.Cookies.Delete("jwt");
+
+            return Ok(new { message = "Cookie removed" });
+        }
+
     }
 }

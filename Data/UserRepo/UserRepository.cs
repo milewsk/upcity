@@ -17,7 +17,13 @@ namespace upcity.Data.UserRepo
             _context = context;
         }
 
-        public User GetUser(string email)
+        public User GetUserByGuid(Guid guid) {
+            var user = (from x in _context.Users where guid == x.Id select x).FirstOrDefault();
+
+            return user;
+        }
+
+        public User GetUserByEmail(string email)
         {
             var user = (from x in _context.Users where email == x.Email select x).FirstOrDefault();
 
@@ -27,13 +33,13 @@ namespace upcity.Data.UserRepo
         public User CreateUser(UserDTO userDTO)
         {
             //logic for validation 
-            if (true)
+            if (GetUserByEmail(userDTO.Email) == null)
             {
                 User user = new User(userDTO.Email, BCrypt.Net.BCrypt.HashPassword(userDTO.Password));
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
-                user = GetUser(user.Email);
+                user = GetUserByEmail(user.Email);
 
                 return user;
             }
@@ -45,7 +51,7 @@ namespace upcity.Data.UserRepo
         {
             if (true)
             {
-                var user = GetUser(userDTO.Email);
+                var user = GetUserByEmail(userDTO.Email);
 
                 if (user == null) return null;
 
@@ -55,9 +61,7 @@ namespace upcity.Data.UserRepo
                 }
 
                 return user;
-            }
-
-            return null;
+            }           
         }
     }
 }

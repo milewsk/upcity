@@ -10,7 +10,8 @@ namespace upcity.Data.UserRepo
     public interface IUserRepository
     {
 
-        User GetUser(string email);
+        User GetUserByGuid(Guid guid);
+        User GetUserByEmail(string email);
 
 
         User CreateUser(UserDTO user);
