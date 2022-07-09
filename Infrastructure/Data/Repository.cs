@@ -7,7 +7,7 @@ using upcity.SharedKernel.Interfaces;
 
 namespace upcity.Infrastructure.Data
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, IAggregateRoot
+    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         protected readonly ApplicationDbContext _context;
 

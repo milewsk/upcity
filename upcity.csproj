@@ -26,7 +26,6 @@
   <ItemGroup>
     <Folder Include="Domain\Exeptions\" />
     <Folder Include="Domain\Services\" />
-    <Folder Include="Infrastructure\Data\Repositories\" />
   </ItemGroup>
 
 </Project>

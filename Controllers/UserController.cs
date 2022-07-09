@@ -18,10 +18,10 @@ namespace upcity.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository2 _userRepository;
         private readonly IJwtService _jwtService;
 
-        public UserController(IUserRepository userRepository, IJwtService jwtService)
+        public UserController(IUserRepository2 userRepository, IJwtService jwtService)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;

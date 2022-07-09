@@ -8,7 +8,7 @@ using upcity.Domain.ModelsDto;
 
 namespace upcity.Data.UserRepo
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository2
     {
         private readonly ApplicationDbContext _context;
 

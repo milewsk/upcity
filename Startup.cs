@@ -37,7 +37,7 @@ namespace upcity
 
             services.AddControllers();
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserRepository2, UserRepository>();
             services.AddScoped<JwtService>();
 
             services.AddSwaggerGen(c =>

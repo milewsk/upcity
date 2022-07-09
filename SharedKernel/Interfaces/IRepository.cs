@@ -7,7 +7,7 @@ using Ardalis.Specification;
 
 namespace upcity.SharedKernel.Interfaces
 {
-    public interface IRepository<TEntity>  where TEntity : class, IAggregateRoot
+    public interface IRepository<TEntity>  where TEntity : class
     {
         TEntity Get(Guid id);
         IEnumerable<TEntity> GetAll();

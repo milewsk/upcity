@@ -7,7 +7,7 @@ using upcity.Domain.ModelsDto;
 
 namespace upcity.Data.UserRepo
 {
-    public interface IUserRepository
+    public interface IUserRepository2
     {
 
         User GetUserByGuid(Guid guid);
