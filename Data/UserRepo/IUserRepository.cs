@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using upcity.Domain.Models;
-using upcity.Domain.ModelsDTO;
+using upcity.Domain.ModelsDto;
 
 namespace upcity.Data.UserRepo
 {
@@ -14,9 +14,9 @@ namespace upcity.Data.UserRepo
         User GetUserByEmail(string email);
 
 
-        User CreateUser(UserDTO user);
+        User CreateUser(UserDto user);
 
-        User LoginUser(UserDTO user);
+        User LoginUser(UserDto user);
         
     }
 }

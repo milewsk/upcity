@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace upcity.Domain.ModelsDTO
+namespace upcity.Domain.ModelsDto
 {
-    public class UserDTO
+    public class UserDto
     {
         public string Email { get; set; }
 
         public string Password { get; set; }
 
-        public UserDTO()
+        public UserDto()
         {
 
         }
-        public UserDTO(string email, string password)
+        public UserDto(string email, string password)
         {
             Email = email;
             Password = password;

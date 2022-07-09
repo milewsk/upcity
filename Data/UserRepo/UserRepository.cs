@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using upcity.Database;
 using upcity.Domain.Models;
-using upcity.Domain.ModelsDTO;
+using upcity.Domain.ModelsDto;
 
 namespace upcity.Data.UserRepo
 {
@@ -30,12 +30,12 @@ namespace upcity.Data.UserRepo
             return user;
         }
 
-        public User CreateUser(UserDTO userDTO)
+        public User CreateUser(UserDto userDto)
         {
             //logic for validation 
-            if (GetUserByEmail(userDTO.Email) == null)
+            if (GetUserByEmail(userDto.Email) == null)
             {
-                User user = new User(userDTO.Email, BCrypt.Net.BCrypt.HashPassword(userDTO.Password));
+                User user = new User(userDto.Email, BCrypt.Net.BCrypt.HashPassword(userDto.Password));
                 _context.Users.Add(user);
                 _context.SaveChanges();
 
@@ -47,15 +47,15 @@ namespace upcity.Data.UserRepo
             return null;
         }
 
-        public User LoginUser(UserDTO userDTO)
+        public User LoginUser(UserDto userDto)
         {
             if (true)
             {
-                var user = GetUserByEmail(userDTO.Email);
+                var user = GetUserByEmail(userDto.Email);
 
                 if (user == null) return null;
 
-                if (!BCrypt.Net.BCrypt.Verify(userDTO.Password, user.Password))
+                if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.Password))
                 {
                     return null;
                 }

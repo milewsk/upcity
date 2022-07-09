@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 using upcity.Data;
 using upcity.Data.UserRepo;
 using upcity.Domain.Models;
-using upcity.Domain.ModelsDTO;
+using upcity.Domain.ModelsDto;
 using upcity.Helpers;
+using upcity.Interfaces;
 
 namespace upcity.Controllers
 {
@@ -18,9 +19,9 @@ namespace upcity.Controllers
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
-        private readonly JwtService _jwtService;
+        private readonly IJwtService _jwtService;
 
-        public UserController(IUserRepository userRepository, JwtService jwtService)
+        public UserController(IUserRepository userRepository, IJwtService jwtService)
         {
             _userRepository = userRepository;
             _jwtService = jwtService;
@@ -45,19 +46,20 @@ namespace upcity.Controllers
             }catch(Exception e)
             {
                 return Unauthorized();
+                throw;
             }
             
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> RegisterUser([FromBody] UserDto userDto)
         {
 
-            User user = _userRepository.CreateUser(userDTO);
+            User user = _userRepository.CreateUser(userDto);
             if (user != null)
             {
-                return Created("created",JsonConvert.SerializeObject(new ResponseSchema(201, "Rejestracja pomyślna", new { email = user.Email })));
+                return Created("created",JsonConvert.SerializeObject(new ResponseSchema(200, "Rejestracja pomyślna", new { email = user.Email })));
             }
 
             return BadRequest(new ResponseSchema(400, "Taki użytkownik już istnieje", null));
@@ -65,9 +67,9 @@ namespace upcity.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> LoginUser([FromBody] UserDTO userDTO)
+        public async Task<IActionResult> LoginUser([FromBody] UserDto userDto)
         {
-            var user = _userRepository.LoginUser(userDTO);
+            var user = _userRepository.LoginUser(userDto);
 
             if (user == null) return BadRequest(new { message = "Podany email lub hasło są niepoprawne" });
 
